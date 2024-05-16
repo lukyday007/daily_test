@@ -1,8 +1,9 @@
-# from django.urls import path
-# from . import views
+from django.urls import path
+from . import views
 
-# app_name="finance_prdts"
-# urlpatterns = [
+app_name="finance_prdts"
+urlpatterns = [
+    path('save_products/', views.save_products, name='save_products'), # DB에 저장
 #    path('deposit_list/', views.deposit_list),
 #    path('deposit_list/<str:deposit_code>/', views.deposit_detail),
 #    path('deposit_list/<str:deposit_code>/Option_list/', views.depositOption_list),
@@ -42,4 +43,4 @@
 #    # path('recommend_product_one/', views.recommend_product_one),
 #    # path('recommend_product_two/', views.recommend_product_two),
 #    # path('make_financial_data/', views.make_financial_data)
-# ]
+]
