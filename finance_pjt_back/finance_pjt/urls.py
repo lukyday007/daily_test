@@ -24,8 +24,8 @@ from finance_prdts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    # path('accounts/', include('accounts.urls')),
     path('articles/', include('articles.urls')),
-    path('finance_prdts/', include('finance_prdts.urls')),
-    path('exchanges/', include('exchanges.urls')),
+    # path('finance_prdts/', include('finance_prdts.urls')),
+    # path('exchanges/', include('exchanges.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
