@@ -1,13 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from django.contrib.auth import get_user_model
 import requests
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from .models import DepositOptions, DepositProducts, SavingOptions, SavingProducts, LoanOptions, LoanProducts
-from .serializers import DepositOptionsSerializer, DepositProductsSerializer, SavingOptionsSerializer, SavingProductsSerializer, LoanOptionsSerializer, LoanProductsSerializer
+# from .models import DepositOptions, DepositProducts, SavingOptions, SavingProducts, LoanOptions, LoanProducts
+from .models import *
+# from .serializers import DepositOptionsSerializer, DepositProductsSerializer, SavingOptionsSerializer, SavingProductsSerializer, LoanOptionsSerializer, LoanProductsSerializer
+from .serializers import *
 
 API_KEY = '664b04c24b9ab5090e97c4dc608cce44'
 
@@ -182,3 +185,117 @@ def save_products(request):
             optionserializer.save(loan=loan)
 
     return JsonResponse({'message':'finance 저장'})
+
+
+@api_view(['GET'])
+#    전체 예금상품 목록 조회 
+#   path('dep_list/', views.dep_list),
+def dep_list(request):
+    dep_prdts = DepositProducts.objects.all()
+    serializers = DepositProductsSerializer(dep_prdts, many=True)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#    코드로 예금상폼 목록 조회 
+#   path('dep_list/<str:dep_cd>/', views.dep_detail),
+def dep_detail(request, dep_cd):
+    dep_prdts = get_object_or_404(DepositProducts, dep_cd=dep_cd)
+    serializers = DepositProductsSerializer(dep_prdts)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 예금상품 옵션 목록 조회 
+#   path('dep_list/<str:dep_cd>/opt_list/', views.depOpt_list),
+def depOpt_list(request, dep_cd):
+    dep_prdts = get_object_or_404(DepositProducts, dep_cd=dep_cd)
+    dep_options = DepositOptions.objects.filter(dep_prdts=dep_prdts)
+    serializers = DepositOptionsSerializer(dep_options, many=True)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 예금상품 옵션 단일 조회 
+#   path('dep_list/<str:dep_cd>/opt_list/<int:depOpt_pk>/', views.depOpt_detail),
+def depOpt_detail(request, dep_cd, depOpt_pk):
+    dep_prdts = get_object_or_404(DepositProducts, dep_cd=dep_cd)
+    dep_options = get_object_or_404(DepositOptions, pk=depOpt_pk, dep_prdts=dep_prdts)
+    serializers = DepositOptionsSerializer(dep_options)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   전체 적금상품 목록 조회
+#   path('sav_list/', views.sav_list),
+def sav_list(request):
+    sav_prdts = SavingProducts.objects.all()
+    serializers = SavingProductsSerializer(sav_prdts, many=True)
+    return Response(serializers.data)
+    
+
+@api_view(['GET'])
+#   코드로 적금상품 목록 조회 
+#   path('sav_list/<str:sav_cd>/', views.sav_detail),
+def sav_detail(request, sav_cd):
+    sav_prdts = get_object_or_404(SavingProducts, sav_cd=sav_cd)
+    serializers = SavingProductsSerializer(sav_prdts)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 적금상품 옵션 목록 조회
+#   path('sav_list/<str:sav_cd>/opt_list/', views.savOpt_list),
+def savOpt_list(request, sav_cd):
+    sav_prdt = get_object_or_404(SavingProducts, sav_cd=sav_cd)
+    sav_options = SavingOptions.objects.filter(sav_prdts=sav_prdt)
+    serializers = SavingOptionsSerializer(sav_options, many=True)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 적금상폼 옵션 단일 조회 
+#   path('sav_list/<str:sav_cd>/opt_list/<int:savOpt_pk>/', views.savOpt_detail),
+def savOpt_detail(request, sav_cd, savOpt_pk):
+    sav_prdt = get_object_or_404(SavingProducts, sav_cd=sav_cd)
+    sav_option = get_object_or_404(SavingOptions, pk=savOpt_pk, sav_prdts=sav_prdt)
+    serializers = SavingOptionsSerializer(sav_option)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   전체 대출상품 목록 조회 
+#   path('loan_list/', views.loan_list),
+def loan_list(request):
+    loan_prdts = LoanProducts.objects.all()
+    serializers = LoanProductsSerializer(loan_prdts, many=True)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   코드로 대출 상품 목록 조회 
+#   path('loan_list/<str:loan_cd>/', views.loan_detail),
+def loan_detail(request, loan_cd):
+    loan_prdts = get_object_or_404(LoanProducts, loan_cd=loan_cd)
+    serializers = LoanProductsSerializer(loan_prdts)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 대출상품 옵션 목록 조회 
+#   path('loan_list/<str:loan_cd>/opt_list/', views.loanOpt_list),
+def loanOpt_list(request, loan_cd):
+    loan_prdts = get_object_or_404(LoanProducts, loan_cd=loan_cd)
+    loan_options = LoanOptions.objects.filter(loan_prdts=loan_prdts)
+    serializers = LoanOptionsSerializer(loan_options, many=True)
+    return Response(serializers.data)
+
+
+@api_view(['GET'])
+#   해당 코드 대출상품 옵션 단일 조회 
+#   path('loan_list/<str:loan_cd>/opt_list/<int:loanOpt_pk>/', views.loanOpt_detail),
+def loanOpt_detail(request, loan_cd, loanOpt_pk):
+    loan_prdt = get_object_or_404(LoanProducts, loan_cd=loan_cd)
+    loan_option = get_object_or_404(LoanOptions, pk=loanOpt_pk, loan_prdt=loan_prdt)
+    serializers = DepositOptionsSerializer(loan_option)
+    return Response(serializers.data)
