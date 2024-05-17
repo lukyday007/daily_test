@@ -13,6 +13,12 @@
       <input type="submit">
     </form>
   </div>
+
+  <div>
+    <br>
+    <span>아직 회원이 아니라면 => </span>
+    <RouterLink :to="{name:'signin'}">회원가입</RouterLink>
+  </div>
 </template>
 
 <script setup>
