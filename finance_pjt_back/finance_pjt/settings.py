@@ -174,4 +174,4 @@ REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.CustomUserDetailsSerializer',
 }
 
-ACCOUNT_ADAPTER  = 'accounts.models.CustomAccountAdapter'
+ACCOUNT_ADAPTER  = 'accounts.adapters.CustomAccountAdapter'

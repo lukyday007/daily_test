@@ -5,14 +5,15 @@ from django.contrib.auth import get_user_model
 
 class CustomRegisterSerializer(RegisterSerializer):
     nickname = serializers.CharField(required=False, allow_blank=True, max_length=255)
-    age = serializers.CharField(required=False, allow_null=True)
-    salary = serializers.CharField(required=False, allow_null=True)
-    balance = serializers.CharField(required=False, allow_null=True)
-    debt = serializers.CharField(required=False, allow_null=True)
-    creditscore = serializers.CharField(required=False, allow_null=True)
+    age = serializers.IntegerField(required=False, allow_null=True)
+    salary = serializers.IntegerField(required=False, allow_null=True)
+    balance = serializers.IntegerField(required=False, allow_null=True)
+    debt = serializers.IntegerField(required=False, allow_null=True)
+    creditscore = serializers.IntegerField(required=False, allow_null=True)
     def get_cleaned_data(self):
         return {
             'username': self.validated_data.get('username', ''),
+            'email': self.validated_data.get('email', ''),
             'password1': self.validated_data.get('password1', ''),
             'nickname': self.validated_data.get('nickname', ''),
             'age': self.validated_data.get('age', ''),
@@ -50,4 +51,4 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         model = UserModel
         fields = '__all__'
         # fields = ('pk', *extra_fields)
-        # read_only_fields = ('email',)
+        read_only_fields = ('email',)
