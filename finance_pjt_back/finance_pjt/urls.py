@@ -28,4 +28,6 @@ urlpatterns = [
     path('articles/', include('articles.urls')),
     path('finance_prdts/', include('finance_prdts.urls')),
     # path('exchanges/', include('exchanges.urls')),
+    path('accounts/', include('dj_rest_auth.urls')),
+    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
