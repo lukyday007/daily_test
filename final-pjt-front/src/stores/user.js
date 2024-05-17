@@ -8,6 +8,14 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(null)
   const router = useRouter()
 
+  const isLogin = computed(() => {
+    if (token.value === null) {
+      return false
+    } else {
+      return true
+    }
+  })
+
   const logIn = function (payload) {
     const { username, password } = payload
     axios({
@@ -47,6 +55,21 @@ export const useUserStore = defineStore('user', () => {
      })
   }
 
+  const logOut = function () {
+    axios({
+      method: 'post',
+      url: `${API_URL}/accounts/logout/`,
+      headers: { Authorization: `Token ${token.value}`}
+    })
+      .then(res => {
+        console.log(res.data)
+        token.value = null  // token 초기화
+        router.push({ name: 'login' })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
-  return { token, logIn, signUp }
+  return { token, logIn, signUp, logOut, isLogin }
 })
