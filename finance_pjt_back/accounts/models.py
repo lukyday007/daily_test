@@ -2,46 +2,70 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_field, user_username
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 class User(AbstractUser):
     nickname = models.CharField(max_length=100)
-    age = models.CharField(max_length=10)
-    salary = models.CharField(max_length=1000)
+    age = models.IntegerField()
+    salary = models.IntegerField()
+    balance = models.IntegerField()
+    debt = models.IntegerField()
+    creditscore = models.IntegerField()
+    joinproduct = models.CharField(max_length=100)
+    profile_image = ProcessedImageField(
+        blank=True,
+        upload_to='profile_image/%Y/%m',
+        processors=[ResizeToFill(300, 300)],
+        format='JPEG',
+        options={'quality': 70},
+    )
+# class CustomAccountAdapter(DefaultAccountAdapter):
+#     def save_user(self, request, user, form, commit=True):
+#         data = form.cleaned_data
+#         first_name = data.get("first_name")
+#         last_name = data.get("last_name")
+#         email = data.get("email")
+#         username = data.get("username")
 
+#         nickname = data.get("nickname")
+#         age = data.get("age")
+#         salary = data.get("salary")
+#         balance = data.get("balance")
+#         debt = data.get("debt")
+#         creditscore = data.get("creditscore")
 
-class CustomAccountAdapter(DefaultAccountAdapter):
-    def save_user(self, request, user, form, commit=True):
-        data = form.cleaned_data
-        first_name = data.get("first_name")
-        last_name = data.get("last_name")
-        email = data.get("email")
-        username = data.get("username")
-
-        nickname = data.get("nickname")
-        age = data.get("age")
-        salary = data.get("salary")
-        if first_name:
-            user_field(user, "first_name", first_name)
-        if last_name:
-            user_field(user, "last_name", last_name)
-        if email:
-            user_field(user, "email", email)
-        if username:
-            user_field(user, "username", username)
-        if nickname:
-            user_field(user, "nickname", nickname)
-        if age:
-            user_field(user, "age", age)
-        if salary:
-            user_field(user, "salary", salary)
-        if "password1" in data:
-            user.set_password(data["password1"])
-        else:
-            user.set_unusable_password()
-        self.populate_username(request, user)
-        if commit:
-            user.save()
-        return user
+#         user = super().save_user(request, user, form, False)
+#         # 추가 저장 필드: profile_image
+        
+#         if first_name:
+#             user_field(user, "first_name", first_name)
+#         if last_name:
+#             user_field(user, "last_name", last_name)
+#         if email:
+#             user_field(user, "email", email)
+#         if username:
+#             user_field(user, "username", username)
+#         if nickname:
+#             user_field(user, "nickname", nickname)
+#         if age:
+#             user_field(user, "age", age)
+#         if salary:
+#             user_field(user, "salary", salary)
+#         if balance:
+#             user_field(user, "balance", balance)
+#         if debt:
+#             user_field(user, "debt", debt)
+#         if creditscore:
+#             user_field(user, "creditscore", creditscore)
+#         if "password1" in data:
+#             user.set_password(data["password1"])
+#         else:
+#             user.set_unusable_password()
+#         self.populate_username(request, user)
+#         # if commit:
+#         user.save()
+#         return user
 
 # # -------- 모델링 목록 ------------
 # # user_id (Var)
