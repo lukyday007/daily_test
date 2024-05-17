@@ -7,9 +7,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-# from .models import DepositOptions, DepositProducts, SavingOptions, SavingProducts, LoanOptions, LoanProducts
 from .models import *
-# from .serializers import DepositOptionsSerializer, DepositProductsSerializer, SavingOptionsSerializer, SavingProductsSerializer, LoanOptionsSerializer, LoanProductsSerializer
 from .serializers import *
 
 API_KEY = '664b04c24b9ab5090e97c4dc608cce44'
