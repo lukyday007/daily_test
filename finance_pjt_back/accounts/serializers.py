@@ -7,7 +7,9 @@ class CustomRegisterSerializer(RegisterSerializer):
     nickname = serializers.CharField(required=False, allow_blank=True, max_length=255)
     age = serializers.CharField(required=False, allow_null=True)
     salary = serializers.CharField(required=False, allow_null=True)
-
+    balance = serializers.CharField(required=False, allow_null=True)
+    debt = serializers.CharField(required=False, allow_null=True)
+    creditscore = serializers.CharField(required=False, allow_null=True)
     def get_cleaned_data(self):
         return {
             'username': self.validated_data.get('username', ''),
@@ -15,6 +17,9 @@ class CustomRegisterSerializer(RegisterSerializer):
             'nickname': self.validated_data.get('nickname', ''),
             'age': self.validated_data.get('age', ''),
             'salary': self.validated_data.get('salary', ''),
+            'balance': self.validated_data.get('balance', ''),
+            'debt': self.validated_data.get('debt', ''),
+            'creditscore': self.validated_data.get('creditscore', ''),
         }
     
 UserModel = get_user_model()
@@ -36,6 +41,12 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             extra_fields.append('age')
         if hasattr(UserModel, 'salary'):
             extra_fields.append('salary')
+        if hasattr(UserModel, 'balance'):
+            extra_fields.append('balance')
+        if hasattr(UserModel, 'debt'):
+            extra_fields.append('debt')
+        if hasattr(UserModel, 'creditscore'):
+            extra_fields.append('creditscore')
         model = UserModel
         fields = '__all__'
         # fields = ('pk', *extra_fields)

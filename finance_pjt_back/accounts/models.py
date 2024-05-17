@@ -7,7 +7,9 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=100)
     age = models.CharField(max_length=10)
     salary = models.CharField(max_length=1000)
-
+    balance = models.CharField(max_length=1000)
+    debt = models.CharField(max_length=1000)
+    creditscore = models.CharField(max_length=1000)
 
 class CustomAccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
@@ -20,6 +22,9 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         nickname = data.get("nickname")
         age = data.get("age")
         salary = data.get("salary")
+        balance = data.get("balance")
+        debt = data.get("debt")
+        creditscore = data.get("creditscore")
         if first_name:
             user_field(user, "first_name", first_name)
         if last_name:
@@ -34,6 +39,12 @@ class CustomAccountAdapter(DefaultAccountAdapter):
             user_field(user, "age", age)
         if salary:
             user_field(user, "salary", salary)
+        if balance:
+            user_field(user, "balance", balance)
+        if debt:
+            user_field(user, "debt", debt)
+        if creditscore:
+            user_field(user, "creditscore", creditscore)
         if "password1" in data:
             user.set_password(data["password1"])
         else:
