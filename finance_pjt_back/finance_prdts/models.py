@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+# ============================ 예금 ============================
+
 class DepositProducts(models.Model):
    fin_co_no = models.CharField(max_length=100)             # 금융회사 코드
    kor_co_nm = models.CharField(max_length=100)             # 금융회사명
@@ -15,6 +17,16 @@ class DepositProducts(models.Model):
    max_limit = models.IntegerField(blank=True, null=True)   # 최고 한도
    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='deposit_contract', blank=True)     # 계약자 
 
+class DepositOptions(models.Model):
+   deposit = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)   # 해당 예금 상품 외래키
+   fin_prdt_cd = models.CharField(max_length=100)           # 금융상품 코드
+   intr_rate_type_nm = models.CharField(max_length=2)    # 저축금리 유형명
+   intr_rate = models.FloatField(null=True)              # 저축금리 
+   intr_rate2 = models.FloatField(null=True)             # 최고 우대금리
+   save_trm = models.IntegerField()             # 저축기간 (개월)
+
+
+# ============================ 적금 ============================
 
 class SavingProducts(models.Model):
    fin_co_no = models.CharField(max_length=100)             # 금융회사 코드
@@ -30,6 +42,18 @@ class SavingProducts(models.Model):
    max_limit = models.IntegerField(blank=True, null=True)   # 최고 한도
    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='saving_contract', blank=True)     # 계약자 
 
+class SavingOptions(models.Model):
+   saving = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)  # 해당 적금 상품 외래키 
+   fin_prdt_cd = models.CharField(max_length=100)           # 금융상품 코드
+   intr_rate_type_nm = models.CharField(max_length=2)    # 저축금리 유형명
+   rsrv_type_nm = models.CharField(max_length=10)        # 적립 유형명
+   intr_rate = models.FloatField(null=True)              # 저축금리 
+   intr_rate2 = models.FloatField(null=True)             # 최고 우대금리
+   save_trm = models.IntegerField()             # 저축기간 (개월)
+
+
+# ============================ 대출 ============================
+
 
 class LoanProducts(models.Model):
    fin_co_no = models.CharField(max_length=100)             # 금융회사 코드
@@ -40,25 +64,6 @@ class LoanProducts(models.Model):
    join_way = models.CharField(max_length=100)              # 가입 방법
    cd_name = models.CharField(max_length=100, blank=True, null=True)               # CB 회사명 (신용평가)
    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='loan_contract', blank=True)
-
-
-class DepositOptions(models.Model):
-   deposit = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)   # 해당 예금 상품 외래키
-   fin_prdt_cd = models.CharField(max_length=100)           # 금융상품 코드
-   intr_rate_type_nm = models.CharField(max_length=2)    # 저축금리 유형명
-   intr_rate = models.FloatField(null=True)              # 저축금리 
-   intr_rate2 = models.FloatField(null=True)             # 최고 우대금리
-   save_trm = models.CharField(max_length=3)             # 저축기간 (개월)
-
-
-class SavingOptions(models.Model):
-   saving = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)  # 해당 적금 상품 외래키 
-   fin_prdt_cd = models.CharField(max_length=100)           # 금융상품 코드
-   intr_rate_type_nm = models.CharField(max_length=2)    # 저축금리 유형명
-   rsrv_type_nm = models.CharField(max_length=10)        # 적립 유형명
-   intr_rate = models.FloatField(null=True)              # 저축금리 
-   intr_rate2 = models.FloatField(null=True)             # 최고 우대금리
-   save_trm = models.CharField(max_length=3)             # 저축기간 (개월)
 
 
 class LoanOptions(models.Model):
