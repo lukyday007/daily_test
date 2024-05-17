@@ -26,6 +26,9 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         creditscore = data.get("creditscore")
         if creditscore:
             user.creditscore = creditscore
+        profile_image = data.get("profile_image")
+        if profile_image:
+            user.profile_image = profile_image
 
         user.save()
         return user

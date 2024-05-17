@@ -10,8 +10,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     balance = serializers.IntegerField(required=False, allow_null=True)
     debt = serializers.IntegerField(required=False, allow_null=True)
     creditscore = serializers.IntegerField(required=False, allow_null=True)
+    profile_image = serializers.ImageField(required=False, allow_null=True, use_url=True)
     def get_cleaned_data(self):
         return {
+            'profile_image': self.validated_data.get('profile_image', ''),
             'username': self.validated_data.get('username', ''),
             'email': self.validated_data.get('email', ''),
             'password1': self.validated_data.get('password1', ''),
@@ -48,6 +50,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             extra_fields.append('debt')
         if hasattr(UserModel, 'creditscore'):
             extra_fields.append('creditscore')
+        if hasattr(UserModel, 'profile_image'):
+            extra_fields.append('profile_image')
         model = UserModel
         fields = '__all__'
         # fields = ('pk', *extra_fields)

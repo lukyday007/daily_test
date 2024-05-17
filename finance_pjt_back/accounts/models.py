@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_field, user_username
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 class User(AbstractUser):
     nickname = models.CharField(max_length=100)
@@ -10,7 +12,14 @@ class User(AbstractUser):
     balance = models.IntegerField()
     debt = models.IntegerField()
     creditscore = models.IntegerField()
-    
+    joinproduct = models.CharField(max_length=100)
+    profile_image = ProcessedImageField(
+        blank=True,
+        upload_to='profile_image/%Y/%m',
+        processors=[ResizeToFill(300, 300)],
+        format='JPEG',
+        options={'quality': 70},
+    )
 # class CustomAccountAdapter(DefaultAccountAdapter):
 #     def save_user(self, request, user, form, commit=True):
 #         data = form.cleaned_data
